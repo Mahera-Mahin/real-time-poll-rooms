@@ -1,15 +1,20 @@
-FROM node:20-alpine AS base
+# Use official Node image
+FROM node:20-alpine
 
 WORKDIR /app
 
-COPY package.json ./
+# Copy all files first
+COPY . .
+
+# Install dependencies
 RUN npm install
 
-COPY . .
+# Generate Prisma client
 RUN npx prisma generate
+
+# Build Next.js
 RUN npm run build
 
-ENV NODE_ENV=production
 EXPOSE 3000
 
 CMD ["node", "server.js"]
